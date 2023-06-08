@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 
-public class PizzaFrame extends JFrame implements ItemListener {
+public class PizzaFrame extends JFrame implements ItemListener, WindowListener {
 
 	// 피자 프레임의 마지막 선택을 프로그램 재실행시에도 그대로 유지
 	// 정보의 파일 저장과 읽기를 어떤 형태로 할 것인가?
@@ -61,6 +63,7 @@ public class PizzaFrame extends JFrame implements ItemListener {
 	 * Create the frame.
 	 */
 	public PizzaFrame() {
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -92,18 +95,8 @@ public class PizzaFrame extends JFrame implements ItemListener {
 		pnl.add(btn);
 		add(pnl, "North");
 
-		JPanel pnl2 = new JPanel();
-		JButton btnSave = new JButton("저장");
-		btnSave.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveSelectionToFile();
-			}
-		});
-		pnl2.add(btnSave);
-		add(pnl2, "West");
+		addWindowListener(this);
 
-		readLastSelection();
 	}
 
 	private void 체크박스취소() {
@@ -213,6 +206,46 @@ public class PizzaFrame extends JFrame implements ItemListener {
 		}
 	}
 
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		int price = getPizzaPrice() + getOptionPrice();
+		lblPrice.setText("총 가격: " + price);
+	}
+
+	public void saveLastSelection() {
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter("d:\\filetest\\selection.txt"));
+			// 사용자의 선택 정보를 파일에 저장
+			if (rdbPepperoni.isSelected()) {
+				writer.write("1\n");
+			} else if (rdbCheese.isSelected()) {
+				writer.write("2\n");
+			} else if (rdbGogi.isSelected()) {
+				writer.write("3\n");
+			}
+
+			if (chkPickle.isSelected()) {
+				writer.write("피클추가\n");
+			}
+			if (chkCheese.isSelected()) {
+				writer.write("치즈추가\n");
+			}
+			if (chkHotSource.isSelected()) {
+				writer.write("핫소스추가\n");
+			}
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+		}
+	}
+
 	private void readLastSelection() {
 		File file = new File("D:\\filetest\\selection.txt");
 		BufferedReader reader = null;
@@ -236,40 +269,6 @@ public class PizzaFrame extends JFrame implements ItemListener {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
-		}
-	}
-
-	private void saveSelectionToFile() {
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter("d:\\filetest\\selection.txt"));
-			// 사용자의 선택 정보를 파일에 저장
-			if (rdbPepperoni.isSelected()) {
-				writer.write("1\n");
-			} else if (rdbCheese.isSelected()) {
-				writer.write("2\n");
-			} else if (rdbGogi.isSelected()) {
-				writer.write("3\n");
-			}
-
-			if (chkPickle.isSelected()) {
-				writer.write("피클추가\n");
-			}
-			if (chkCheese.isSelected()) {
-				writer.write("치즈추가\n");
-			}
-			if (chkHotSource.isSelected()) {
-				writer.write("핫소스추가\n");
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -303,8 +302,38 @@ public class PizzaFrame extends JFrame implements ItemListener {
 	}
 
 	@Override
-	public void itemStateChanged(ItemEvent e) {
-		int price = getPizzaPrice() + getOptionPrice();
-		lblPrice.setText("총 가격: " + price);
+	public void windowOpened(WindowEvent e) {
+		readLastSelection();
+
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		saveLastSelection();
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+
 	}
 }
