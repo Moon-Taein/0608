@@ -1,4 +1,4 @@
 .class
 .project
 .classpath
-/Main1.class
+*.class
