@@ -260,7 +260,6 @@ public class PizzaFrame extends JFrame implements ItemListener, WindowListener {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			if (reader != null) {
@@ -304,7 +303,6 @@ public class PizzaFrame extends JFrame implements ItemListener, WindowListener {
 	@Override
 	public void windowOpened(WindowEvent e) {
 		readLastSelection();
-
 	}
 
 	@Override
