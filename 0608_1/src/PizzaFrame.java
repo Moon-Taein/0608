@@ -226,13 +226,13 @@ public class PizzaFrame extends JFrame implements ItemListener, WindowListener {
 			}
 
 			if (chkPickle.isSelected()) {
-				writer.write("피클추가\n");
+				writer.write("4\n");
 			}
 			if (chkCheese.isSelected()) {
-				writer.write("치즈추가\n");
+				writer.write("5\n");
 			}
 			if (chkHotSource.isSelected()) {
-				writer.write("핫소스추가\n");
+				writer.write("6\n");
 			}
 
 		} catch (IOException e1) {
@@ -287,13 +287,13 @@ public class PizzaFrame extends JFrame implements ItemListener, WindowListener {
 	}
 
 	private boolean selectedLastOptions(String str) {
-		if (str.equals("피클추가")) {
+		if (str.equals("4")) {
 			chkPickle.setSelected(true);
 			return true;
-		} else if (str.equals("치즈추가")) {
+		} else if (str.equals("5")) {
 			chkCheese.setSelected(true);
 			return true;
-		} else if (str.equals("핫소스추가")) {
+		} else if (str.equals("6")) {
 			chkHotSource.setSelected(true);
 			return true;
 		}
